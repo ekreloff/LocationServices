@@ -8,19 +8,23 @@
 
 import Foundation
 
-public extension Date {
-    func toShortStyleString() -> String {
+//public extension Date {
+
+//}
+
+public extension DateFormatter {
+    static var xsdDateTime:DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+        dateFormatter.timeZone = TimeZone.current
+        return dateFormatter
+    }
+    
+    static var shortStyle:DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
         dateFormatter.timeZone = TimeZone.current
-        return dateFormatter.string(from: self)
-    }
-    
-    func toXSDDateTime() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-        dateFormatter.timeZone = TimeZone.current
-        return dateFormatter.string(from: self)
+        return dateFormatter
     }
 }
