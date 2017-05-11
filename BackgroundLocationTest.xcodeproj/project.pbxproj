@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C62F5CA01EC4CDD5003C97B5 /* GPXCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62F5C9F1EC4CDD5003C97B5 /* GPXCreator.swift */; };
+		C62F5CA21EC4CDFF003C97B5 /* GPX.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62F5CA11EC4CDFF003C97B5 /* GPX.swift */; };
 		C64941E51EC1222100DD4942 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64941E41EC1222100DD4942 /* AppDelegate.swift */; };
 		C64941E71EC1222100DD4942 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64941E61EC1222100DD4942 /* ViewController.swift */; };
 		C64941EA1EC1222100DD4942 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C64941E81EC1222100DD4942 /* Main.storyboard */; };
@@ -14,6 +16,7 @@
 		C64941EF1EC1222100DD4942 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C64941ED1EC1222100DD4942 /* LaunchScreen.storyboard */; };
 		C64941FA1EC1222100DD4942 /* BackgroundLocationTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64941F91EC1222100DD4942 /* BackgroundLocationTestTests.swift */; };
 		C64942051EC1222100DD4942 /* BackgroundLocationTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942041EC1222100DD4942 /* BackgroundLocationTestUITests.swift */; };
+		C64942131EC1226900DD4942 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942121EC1226900DD4942 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C62F5C9F1EC4CDD5003C97B5 /* GPXCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPXCreator.swift; sourceTree = "<group>"; };
+		C62F5CA11EC4CDFF003C97B5 /* GPX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPX.swift; sourceTree = "<group>"; };
 		C64941E11EC1222100DD4942 /* BackgroundLocationTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackgroundLocationTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C64941E41EC1222100DD4942 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C64941E61EC1222100DD4942 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +52,7 @@
 		C64942001EC1222100DD4942 /* BackgroundLocationTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BackgroundLocationTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C64942041EC1222100DD4942 /* BackgroundLocationTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLocationTestUITests.swift; sourceTree = "<group>"; };
 		C64942061EC1222100DD4942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C64942121EC1226900DD4942 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +109,9 @@
 				C64941EB1EC1222100DD4942 /* Assets.xcassets */,
 				C64941ED1EC1222100DD4942 /* LaunchScreen.storyboard */,
 				C64941F01EC1222100DD4942 /* Info.plist */,
+				C64942121EC1226900DD4942 /* LocationManager.swift */,
+				C62F5C9F1EC4CDD5003C97B5 /* GPXCreator.swift */,
+				C62F5CA11EC4CDFF003C97B5 /* GPX.swift */,
 			);
 			path = BackgroundLocationTest;
 			sourceTree = "<group>";
@@ -195,6 +204,11 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 2C9WFQT4A5;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					C64941F41EC1222100DD4942 = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -264,6 +278,9 @@
 			files = (
 				C64941E71EC1222100DD4942 /* ViewController.swift in Sources */,
 				C64941E51EC1222100DD4942 /* AppDelegate.swift in Sources */,
+				C62F5CA01EC4CDD5003C97B5 /* GPXCreator.swift in Sources */,
+				C64942131EC1226900DD4942 /* LocationManager.swift in Sources */,
+				C62F5CA21EC4CDFF003C97B5 /* GPX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +533,7 @@
 				C649420B1EC1222100DD4942 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C649420C1EC1222100DD4942 /* Build configuration list for PBXNativeTarget "BackgroundLocationTestTests" */ = {
 			isa = XCConfigurationList;
@@ -524,6 +542,7 @@
 				C649420E1EC1222100DD4942 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C649420F1EC1222100DD4942 /* Build configuration list for PBXNativeTarget "BackgroundLocationTestUITests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +551,7 @@
 				C64942111EC1222100DD4942 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
