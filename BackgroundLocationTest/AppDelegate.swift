@@ -18,9 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch
-        writeToFile(content: "----------------- APP RELAUNCHED -----------------")
+        writeToFileEnd(content: "----------------- APP RELAUNCHED -----------------")
         if let _ = launchOptions?[UIApplicationLaunchOptionsKey.location] {
-            writeToFile(content: "----------------- APP RELAUNCHED FOR LOCATION UPDATE -----------------")
+            writeToFileEnd(content: "----------------- APP RELAUNCHED FOR LOCATION UPDATE -----------------")
             locationManager = LocationManager()
         }
         

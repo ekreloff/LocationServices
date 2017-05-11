@@ -9,22 +9,19 @@
 import Foundation
 
 class GPX {
+//    let fileName:String
+    fileprivate let file:File?
     
-    init(filename: String = "Location Data for \(Date().toShortStyleString())") {
-        writeToFile(content: "<?xml version=\"1.0\"?>", fileName: filename)
-        writeToFile(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">", fileName: filename)
-        writeToFile(content: "<metadata><>")
+    init(fileName: String = "Location Data for \(Date().toShortStyleString())") {
+        
+        file = File(fileName: fileName, in: .documentDirectory)
+        print("")
+        
+//        self.fileName = fileName
+//        writeToFileEnd(content: "<?xml version=\"1.0\"?>", fileName: self.fileName)
+//        writeToFileEnd(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">", fileName: self.fileName)
+//        writeToFileEnd(content: "<metadata><name>\(self.fileName)</name><desc>Created using GPX Creator</desc><author>Ethan Kreloff</author><time>\(Date().toXSDDateTime())</time></metadata>", fileName: self.fileName)
+//        writeToFileEnd(content: "</gpx>", fileName: self.fileName)
     }
 }
 
-extension Date {
-    func toShortStyleString() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        dateFormatter.timeZone = TimeZone.current
-        return dateFormatter.string(from: self)
-    }
-    
-    
-}
