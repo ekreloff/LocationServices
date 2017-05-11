@@ -9,7 +9,7 @@
 import Foundation
 
 public extension String {
-    func withEscapedSpaces() -> String{
-        return self.replacingOccurrences(of: " ", with: "\\ ")
+    func fileNameFormattedForFileSystem() -> String{
+        return self.replacingOccurrences(of: "/", with: "-")//.replacingOccurrences(of: " ", with: "\\ ")
     }
 }

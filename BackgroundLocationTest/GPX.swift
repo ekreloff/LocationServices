@@ -9,19 +9,16 @@
 import Foundation
 
 class GPX {
-//    let fileName:String
     fileprivate let file:File?
     
     init(fileName: String = "Location Data for \(Date().toShortStyleString())") {
-        
+        let fileName = fileName + ".gpx"
         file = File(fileName: fileName, in: .documentDirectory)
-        print("")
-        
-//        self.fileName = fileName
-//        writeToFileEnd(content: "<?xml version=\"1.0\"?>", fileName: self.fileName)
-//        writeToFileEnd(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">", fileName: self.fileName)
-//        writeToFileEnd(content: "<metadata><name>\(self.fileName)</name><desc>Created using GPX Creator</desc><author>Ethan Kreloff</author><time>\(Date().toXSDDateTime())</time></metadata>", fileName: self.fileName)
-//        writeToFileEnd(content: "</gpx>", fileName: self.fileName)
+
+        file?.writeToNewlineAtEnd(content: "<?xml version=\"1.0\"?>")
+        file?.writeToNewlineAtEnd(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">")
+        file?.writeToNewlineAtEnd(content: "<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>Ethan Kreloff</author>\n<time>\(Date().toXSDDateTime())</time>\n</metadata>")
+        file?.writeToNewlineAtEnd(content: "</gpx>")
     }
 }
 

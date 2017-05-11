@@ -48,7 +48,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //    }
     //
     override init() {
-        gpx = GPX(fileName: "test")
+        gpx = GPX()
         
         super.init()
         
@@ -239,19 +239,5 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 }
 
-public func writeToFileEnd(content: String, fileName: String = "log.txt") {
-    let contentWithNewLine = content+"\n"
-    let filePath = NSHomeDirectory() + "/Documents/" + fileName
-    let fileHandle = FileHandle(forWritingAtPath: filePath)
-    if (fileHandle != nil) {
-        fileHandle?.seekToEndOfFile()
-        fileHandle?.write(contentWithNewLine.data(using: .utf8)!)
-    } else {
-        do {
-            try contentWithNewLine.write(toFile: filePath, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error while creating \(filePath)")
-        }
-    }
-}
+
 
