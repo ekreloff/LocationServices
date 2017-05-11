@@ -27,6 +27,37 @@ class File {
         }
     }
     
+    func writeToBeginning(content: String) {
+        fileHandle.seek(toFileOffset: 0)
+        
+        if let data = content.data(using: .utf8) {
+            fileHandle.write(data)
+        }
+    }
+    
+    func insertAtNewline(content: String, at offset: UInt64) {
+        let content = "\n" + content
+        fileHandle.seek(toFileOffset: offset)
+        
+        if let data = content.data(using: .utf8) {
+            fileHandle.write(data)
+        }
+    }
+    
+    func insertAtNewlineFromEnd(content: String, at offset: UInt64) {
+        let content = "\n" + content
+        fileHandle.seekToEndOfFile()
+        let offset = fileHandle.offsetInFile - offset
+        
+        if offset > 0 {
+            fileHandle.seek(toFileOffset: offset)
+            
+            if let data = content.data(using: .utf8) {
+                fileHandle.write(data)
+            }
+        }
+    }
+    
     func writeToNewlineAtEnd(content: String) {
         let content = "\n" + content
         fileHandle.seekToEndOfFile()
@@ -35,25 +66,8 @@ class File {
             fileHandle.write(data)
         }
     }
-    
-
 }
 
 
 
 
-public func writeToFileEnd(content: String, fileName: String = "log.txt") {
-    let contentWithNewLine = content+"\n"
-    let filePath = NSHomeDirectory() + "/Documents/" + fileName
-    let fileHandle = FileHandle(forWritingAtPath: filePath)
-    if (fileHandle != nil) {
-        fileHandle?.seekToEndOfFile()
-        fileHandle?.write(contentWithNewLine.data(using: .utf8)!)
-    } else {
-        do {
-            try contentWithNewLine.write(toFile: filePath, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error while creating \(filePath)")
-        }
-    }
-}
