@@ -13,9 +13,6 @@ class GPX {
     fileprivate let timeStampFormatter = DateFormatter.xsdDateTime
     
     init(fileName: String = "Location Data for \(DateFormatter.shortStyle.string(from: Date()))") {
-        
-        
-        
         let fileName = fileName + ".gpx"
         file = File(fileName: fileName, in: .documentDirectory)
 
@@ -24,9 +21,7 @@ class GPX {
         file?.writeToNewlineAtEnd(content: "<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>Ethan Kreloff</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
 //        file?.writeToNewlineAtEnd(content: "</gpx>")
         
-
-        
-        
+        addObservers()
     }
     
     func addCoordinate(location: CLLocationCoordinate2D, at time: Date = Date(), name: String? = nil, description: String? = nil) {
@@ -45,6 +40,11 @@ class GPX {
         file?.writeToNewlineAtEnd(content: coordinateEntry)
     }
     
+    func addComment(content: String) {
+        let comment = "<!-- \(content) -->"
+        file?.writeToNewlineAtEnd(content: comment)
+    }
+    
     func finishGPX() {
         file?.writeToNewlineAtEnd(content: "</gpx>")
         file?.closeFile()
@@ -52,6 +52,15 @@ class GPX {
     
     deinit {
         finishGPX()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func applicationWillTerminate() {
+        finishGPX()
+    }
+    
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
     }
 }
 

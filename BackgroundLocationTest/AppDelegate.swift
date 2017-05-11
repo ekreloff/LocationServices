@@ -10,18 +10,14 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
     
-    var locationManager = LocationManager()
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch
         writeToFileEnd(content: "----------------- APP RELAUNCHED -----------------")
         if let _ = launchOptions?[UIApplicationLaunchOptionsKey.location] {
             writeToFileEnd(content: "----------------- APP RELAUNCHED FOR LOCATION UPDATE -----------------")
-            locationManager = LocationManager()
+//            locationManager = LocationManager()
         }
         
         return true

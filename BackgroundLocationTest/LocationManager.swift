@@ -9,6 +9,12 @@
 import CoreLocation
 import UIKit
 
+public extension Notification.Name {
+    enum Custom {
+        static let LocationUpdated = Notification.Name("Location Updated")
+    }
+}
+
 public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //    static public let defaultManager:LocationManager = LocationManager()
     fileprivate static let timerInterval:TimeInterval = 30
@@ -22,8 +28,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     fileprivate let desiredAccuracy:CLLocationAccuracy = 11.0
     fileprivate let distanceFilter:CLLocationDistance = kCLDistanceFilterNone
-    
-    fileprivate let gpx:GPX
     
     //    static fileprivate var locationManagerSingleton:() = {
     //        DispatchQueue.main.async {
@@ -48,7 +52,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //    }
     //
     override init() {
-        gpx = GPX()
         
         super.init()
         
@@ -108,14 +111,16 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         if cycleCount < intervalRatio {
             cycleCount += 1
         } else {
-            if let coordinate = mostRecentLocation?.coordinate, let timestamp = mostRecentLocation?.timestamp, let accuracy = mostRecentLocation?.horizontalAccuracy {
+            if let location = mostRecentLocation, let timestamp = mostRecentLocation?.timestamp, let accuracy = mostRecentLocation?.horizontalAccuracy {
                 let dateformatter = DateFormatter()
                 dateformatter.dateStyle = .none
                 dateformatter.timeStyle = .medium
                 dateformatter.timeZone = NSTimeZone.local
                 //            print("<\(coordinate.latitude), \(coordinate.longitude)> recieved at \(dateformatter.string(from: timestamp)) with accuracy \(accuracy)" )
-                print("POSTED   <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                writeToFileEnd(content: "POSTED   <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
+                print("POSTED   <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
+                writeToFileEnd(content: "POSTED   <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
+                
+                NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
             
             cycleCount = 0

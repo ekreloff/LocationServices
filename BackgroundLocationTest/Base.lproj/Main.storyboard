@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BackgroundLocationTest" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -16,8 +20,81 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3mA-f9-OjG">
+                                <rect key="frame" x="7.5" y="629" width="359" height="30"/>
+                                <state key="normal" title="Start New GPX"/>
+                                <connections>
+                                    <action selector="startStopButtonAction" destination="BYZ-38-t0r" eventType="touchUpInside" id="aKQ-mr-ngy"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="fCL-lf-oB5">
+                                <rect key="frame" x="0.0" y="28" width="375" height="593"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="File Name (Default is Timestamp)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="U7L-XC-dHc">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="118.5"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Get Location Frequency (Default is 30s)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hhx-Ub-8WI">
+                                        <rect key="frame" x="0.0" y="118.5" width="375" height="118.5"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Post Location Frequency (Default is 120s)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DI0-L1-R4f">
+                                        <rect key="frame" x="0.0" y="237" width="375" height="119"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Desired Accuracy (Default is 15m)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3of-2Z-zCX">
+                                        <rect key="frame" x="0.0" y="356" width="375" height="118.5"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Distance Filter (Default is None)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNo-sj-C5u">
+                                        <rect key="frame" x="0.0" y="474.5" width="375" height="118.5"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="olJ-tV-G74">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="3mA-f9-OjG" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" constant="-16" id="3rF-3T-C2k"/>
+                            <constraint firstItem="fCL-lf-oB5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Hph-Oz-rDT"/>
+                            <constraint firstItem="olJ-tV-G74" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SA0-aO-dER"/>
+                            <constraint firstItem="3mA-f9-OjG" firstAttribute="top" secondItem="fCL-lf-oB5" secondAttribute="bottom" constant="8" symbolic="YES" id="b0F-Id-h13"/>
+                            <constraint firstItem="3mA-f9-OjG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l8U-Wf-PuK"/>
+                            <constraint firstItem="fCL-lf-oB5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="oPm-Op-BgG"/>
+                            <constraint firstItem="olJ-tV-G74" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qrv-T7-B8c"/>
+                            <constraint firstItem="fCL-lf-oB5" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="udr-c4-jTX"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="3mA-f9-OjG" secondAttribute="bottom" constant="8" symbolic="YES" id="v3C-JQ-j7c"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="olJ-tV-G74" id="KiJ-36-vSz"/>
+                        <outlet property="desiredAccuracyTextField" destination="3of-2Z-zCX" id="E55-pn-x7W"/>
+                        <outlet property="distanceFilterTextField" destination="ZNo-sj-C5u" id="c55-12-drd"/>
+                        <outlet property="fileNameTextField" destination="U7L-XC-dHc" id="Ztz-lv-a6y"/>
+                        <outlet property="getLocationFrequencyTextField" destination="Hhx-Ub-8WI" id="b0Q-Az-CZd"/>
+                        <outlet property="postLocationFrequencyTextField" destination="DI0-L1-R4f" id="Kk1-vl-hUk"/>
+                        <outlet property="startStopButton" destination="3mA-f9-OjG" id="o3g-99-0fh"/>
+                        <outletCollection property="stackViewFields" destination="U7L-XC-dHc" collectionClass="NSMutableArray" id="O6j-wO-ONu"/>
+                        <outletCollection property="stackViewFields" destination="Hhx-Ub-8WI" collectionClass="NSMutableArray" id="cq4-EK-HEa"/>
+                        <outletCollection property="stackViewFields" destination="DI0-L1-R4f" collectionClass="NSMutableArray" id="sjy-Ik-lsh"/>
+                        <outletCollection property="stackViewFields" destination="3of-2Z-zCX" collectionClass="NSMutableArray" id="9OF-48-lBO"/>
+                        <outletCollection property="stackViewFields" destination="ZNo-sj-C5u" collectionClass="NSMutableArray" id="zMj-Cn-i5b"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
