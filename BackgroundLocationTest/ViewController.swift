@@ -31,35 +31,48 @@ class ViewController: UIViewController {
     
     @IBAction func startStopButtonAction() {
         if !tracking {
-            startStopButton.setTitle("Finish GPX", for: .normal)
-            
+            tracking = true
+    
             for textField in stackViewFields {
                 textField.isHidden = true
             }
             
             activityIndicator.startAnimating()
+            startStopButton.setTitle("Finish GPX", for: .normal)
             
             if let fileName = fileNameTextField.text {
                 gpx = GPX(fileName: fileName)
             } else {
                 gpx = GPX()
             }
+            
+            addObservers()
         } else {
-            startStopButton.setTitle("Start New GPX", for: .normal)
+            tracking = false
             
             for textField in stackViewFields {
                 textField.isHidden = false
             }
             
             activityIndicator.stopAnimating()
+            startStopButton.setTitle("Start New GPX", for: .normal)
             gpx?.finishGPX()
             gpx = nil
+            removeObservers()
         }
         
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        for textField in stackViewFields {
+            textField.delegate = self
+        }
+    }
+    
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        removeObservers()
     }
     
     func recieveLocation(_ notification: Notification) {
@@ -74,6 +87,15 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(recieveLocation(_:)), name: Notification.Name.Custom.LocationUpdated, object: nil)
     }
     
-    
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 

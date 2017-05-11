@@ -17,17 +17,20 @@ public extension Notification.Name {
 
 public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //    static public let defaultManager:LocationManager = LocationManager()
-    fileprivate static let timerInterval:TimeInterval = 30
-    fileprivate var locationManager = CLLocationManager()
+    fileprivate let locationManager = CLLocationManager()
+    
+    fileprivate let desiredAccuracy:CLLocationAccuracy
+    fileprivate let distanceFilter:CLLocationDistance
+    fileprivate let timerInterval:TimeInterval
+    fileprivate let postInterval:TimeInterval
+    
+    fileprivate var cycleCount = 1
     fileprivate var locationUpdateTimer:Timer?
-    //    fileprivate var backgroundTimer:Timer?
-    fileprivate var cycleCount = 0
-    fileprivate var postInterval:TimeInterval = 120
     fileprivate var backgroundTaskIdentifier = UIBackgroundTaskInvalid
+    
     public var mostRecentLocation:CLLocation?
     
-    fileprivate let desiredAccuracy:CLLocationAccuracy = 11.0
-    fileprivate let distanceFilter:CLLocationDistance = kCLDistanceFilterNone
+    
     
     //    static fileprivate var locationManagerSingleton:() = {
     //        DispatchQueue.main.async {
@@ -51,7 +54,11 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //        let _ = locationManagerSingleton
     //    }
     //
-    override init() {
+    init(getInterval:TimeInterval = 30, postInterval:TimeInterval = 120, accuracy:CLLocationAccuracy = 15.0, distance:CLLocationDistance = kCLDistanceFilterNone) {
+        self.timerInterval = getInterval
+        self.postInterval = postInterval
+        self.desiredAccuracy = accuracy
+        self.distanceFilter = distance
         
         super.init()
         
@@ -77,7 +84,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        locationUpdateTimer = Timer.scheduledTimer(timeInterval: LocationManager.timerInterval, target: self, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
+        locationUpdateTimer = Timer.scheduledTimer(timeInterval: timerInterval, target: self, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
     }
     
     func stopForegroundTimer() {
@@ -107,7 +114,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     //    }
     
     func switchToHighLocationAccuracy() {
-        let intervalRatio = Int(postInterval/LocationManager.timerInterval)
+        let intervalRatio = Int(postInterval/timerInterval)
         if cycleCount < intervalRatio {
             cycleCount += 1
         } else {
@@ -123,7 +130,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
                 NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
             
-            cycleCount = 0
+            cycleCount = 1
             mostRecentLocation = nil
         }
         
