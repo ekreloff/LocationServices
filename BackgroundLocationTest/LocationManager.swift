@@ -77,6 +77,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        stopForegroundTimer()
     }
     
     func startForegroundTimer() {

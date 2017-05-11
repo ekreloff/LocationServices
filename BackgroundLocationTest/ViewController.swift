@@ -11,7 +11,7 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
-    var locationManager = LocationManager()
+    fileprivate var locationManager:LocationManager? = nil
     fileprivate var gpx:GPX? = nil
     fileprivate var tracking = false
 
@@ -40,11 +40,14 @@ class ViewController: UIViewController {
             activityIndicator.startAnimating()
             startStopButton.setTitle("Finish GPX", for: .normal)
             
-            if let fileName = fileNameTextField.text {
+            if let fileName = fileNameTextField.text, !fileName.isEmpty {
                 gpx = GPX(fileName: fileName)
             } else {
                 gpx = GPX()
             }
+            
+            //if let textfield LocationManager(blahblah)
+            locationManager = LocationManager()
             
             addObservers()
         } else {
@@ -57,7 +60,8 @@ class ViewController: UIViewController {
             activityIndicator.stopAnimating()
             startStopButton.setTitle("Start New GPX", for: .normal)
             gpx?.finishGPX()
-            gpx = nil
+//            gpx = nil //race condition wirting and clearing
+            locationManager = nil
             removeObservers()
         }
         
