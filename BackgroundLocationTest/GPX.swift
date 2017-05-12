@@ -18,7 +18,7 @@ class GPX {
 
         file?.writeToBeginning(content: "<?xml version=\"1.0\"?>")
         file?.writeToNewlineAtEnd(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">")
-        file?.writeToNewlineAtEnd(content: "<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>Ethan Kreloff</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
+        file?.writeToNewlineAtEnd(content: "<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>\n<name>Ethan Kreloff</name>\n</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
 //        file?.writeToNewlineAtEnd(content: "</gpx>")
         
         addObservers()
