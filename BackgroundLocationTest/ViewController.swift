@@ -83,7 +83,7 @@ class ViewController: UIViewController {
         var distanceFilter:CLLocationDistance? = nil
         
         func setGPXDescription() {
-            gpxDescription = "Get location frequency: \(getFrequency ?? 30.0)\nPost location frequency: \(postFrequency ?? 120.0)\nDesired accuracy: \(desiredAccuracy ?? 15.0)\nDistance filter: \(distanceFilter ?? kCLDistanceFilterNone)"
+            gpxDescription = "Get location frequency: \(getFrequency ?? 30.0)\nPost location frequency: \(postFrequency ?? 120.0)\nDistance filter: \(distanceFilter ?? kCLDistanceFilterNone)\nDesired accuracy: \(desiredAccuracy ?? 15.0), "
         }
         
         if let value = getLocationFrequencyTextField.text, !value.isEmpty {
@@ -106,15 +106,13 @@ class ViewController: UIViewController {
         locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)
     }
     
-    
-    
     func recieveLocation(_ notification: Notification) {
         guard let location = notification.userInfo?["Location"] as? CLLocation else {
             return
         }
         
         var description = gpxDescription
-        description += "\nBackground?: \(UIApplication.shared.applicationState == .background)"
+        description += "Actual: \(location.horizontalAccuracy)\nBackground?: \(UIApplication.shared.applicationState == .background)\n\(DateFormatter.localMediumTimeStyle.string(from: Date()))"
         gpx?.addCoordinate(location: location.coordinate, description: description)
         gpx?.addComment(description)
     }

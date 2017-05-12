@@ -22,41 +22,42 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3mA-f9-OjG">
-                                <rect key="frame" x="7.5" y="629" width="359" height="30"/>
+                                <rect key="frame" x="7.5" y="608" width="359" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <state key="normal" title="Start New GPX"/>
                                 <connections>
                                     <action selector="startStopButtonAction" destination="BYZ-38-t0r" eventType="touchUpInside" id="aKQ-mr-ngy"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="fCL-lf-oB5">
-                                <rect key="frame" x="0.0" y="28" width="375" height="593"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="150"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="File Name (Default is Timestamp)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="U7L-XC-dHc">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="118.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Get Location Frequency (Default is 30s)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hhx-Ub-8WI">
-                                        <rect key="frame" x="0.0" y="118.5" width="375" height="118.5"/>
+                                        <rect key="frame" x="0.0" y="30" width="375" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Post Location Frequency (Default is 120s)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DI0-L1-R4f">
-                                        <rect key="frame" x="0.0" y="237" width="375" height="119"/>
+                                        <rect key="frame" x="0.0" y="60" width="375" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Desired Accuracy (Default is 15m)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3of-2Z-zCX">
-                                        <rect key="frame" x="0.0" y="356" width="375" height="118.5"/>
+                                        <rect key="frame" x="0.0" y="90" width="375" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Distance Filter (Default is None)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNo-sj-C5u">
-                                        <rect key="frame" x="0.0" y="474.5" width="375" height="118.5"/>
+                                        <rect key="frame" x="0.0" y="120" width="375" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -73,7 +74,6 @@
                             <constraint firstItem="3mA-f9-OjG" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" constant="-16" id="3rF-3T-C2k"/>
                             <constraint firstItem="fCL-lf-oB5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Hph-Oz-rDT"/>
                             <constraint firstItem="olJ-tV-G74" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SA0-aO-dER"/>
-                            <constraint firstItem="3mA-f9-OjG" firstAttribute="top" secondItem="fCL-lf-oB5" secondAttribute="bottom" constant="8" symbolic="YES" id="b0F-Id-h13"/>
                             <constraint firstItem="3mA-f9-OjG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l8U-Wf-PuK"/>
                             <constraint firstItem="fCL-lf-oB5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="oPm-Op-BgG"/>
                             <constraint firstItem="olJ-tV-G74" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qrv-T7-B8c"/>
