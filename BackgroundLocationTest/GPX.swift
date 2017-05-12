@@ -38,7 +38,7 @@ class GPX {
         file?.writeToNewlineAtEnd(coordinateEntry)
     }
     
-    func addComment(content: String) {
+    func addComment(_ content: String) {
         let comment = "<!-- \(content) -->"
         file?.writeToNewlineAtEnd(comment)
     }

@@ -10,10 +10,10 @@ import UIKit
 import CoreLocation
 
 class ViewController: UIViewController {
-    
     fileprivate var locationManager:LocationManager? = nil
     fileprivate var gpx:GPX? = nil
     fileprivate var tracking = false
+    fileprivate var gpxDescription = ""
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -24,9 +24,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var distanceFilterTextField: UITextField!
     
     @IBOutlet var stackViewFields: [UITextField]!
-    
-    
-    
     @IBOutlet weak var startStopButton: UIButton!
     
     @IBAction func startStopButtonAction() {
@@ -81,34 +78,45 @@ class ViewController: UIViewController {
 
     func setLocationManager() {
         var getFrequency:TimeInterval? = nil
+        var postFrequency:TimeInterval? = nil
+        var desiredAccuracy:CLLocationAccuracy? = nil
+        var distanceFilter:CLLocationDistance? = nil
+        
+        func setGPXDescription() {
+            gpxDescription = "Get location frequency: \(getFrequency ?? 30.0)\nPost location frequency: \(postFrequency ?? 120.0)\nDesired accuracy: \(desiredAccuracy ?? 15.0)\nDistance filter: \(distanceFilter ?? kCLDistanceFilterNone)"
+        }
+        
         if let value = getLocationFrequencyTextField.text, !value.isEmpty {
             getFrequency = TimeInterval(value)
         }
         
-        var postFrequency:TimeInterval? = nil
         if let value = postLocationFrequencyTextField.text, !value.isEmpty {
             postFrequency = TimeInterval(value)
         }
         
-        var desiredAccuracy:CLLocationAccuracy? = nil
         if let value = desiredAccuracyTextField.text, !value.isEmpty {
             desiredAccuracy = CLLocationAccuracy(value)
         }
         
-        var distanceFilter:CLLocationDistance? = nil
         if let value = distanceFilterTextField.text, !value.isEmpty {
             distanceFilter = CLLocationDistance(value)
         }
         
+        setGPXDescription()
         locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)
     }
+    
+    
     
     func recieveLocation(_ notification: Notification) {
         guard let location = notification.userInfo?["Location"] as? CLLocation else {
             return
         }
         
-        gpx?.addCoordinate(location: location.coordinate, description: "Put variables herer")
+        var description = gpxDescription
+        description += "\nBackground?: \(UIApplication.shared.applicationState == .background)"
+        gpx?.addCoordinate(location: location.coordinate, description: description)
+        gpx?.addComment(description)
     }
     
     func addObservers() {
