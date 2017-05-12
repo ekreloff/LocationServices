@@ -9,12 +9,6 @@
 import CoreLocation
 import UIKit
 
-public extension Notification.Name {
-    enum Custom {
-        static let LocationUpdated = Notification.Name("Location Updated")
-    }
-}
-
 public final class LocationManager: NSObject, CLLocationManagerDelegate {
     fileprivate let locationManager = CLLocationManager()
     
@@ -59,7 +53,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         if cycleCount < intervalRatio {
             cycleCount += 1
         } else {
-            if let location = mostRecentLocation, let timestamp = mostRecentLocation?.timestamp, let accuracy = mostRecentLocation?.horizontalAccuracy {
+            if let location = mostRecentLocation {
                 logToFileAndDebuggerForLocationManager(title: "POSTED")
                 NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
@@ -98,31 +92,23 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         Log.shared.logToFileAndDebugger("FAILED   ------------------------------------")
     }
     
-    func appLaunched() {
-        Log.shared.logToFileAndDebugger("------------------ APP LAUNCHED ------------------")
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     func appEnteredForeground() {
-        Log.shared.logToFileAndDebugger("------------------ ENTERED FOREGROUND ------------------")
         locationManager.stopMonitoringSignificantLocationChanges()
         locationUpdateTimer?.restartIfNotRunning()
     }
     
     func appWillResignActive() {
-        Log.shared.logToFileAndDebugger( "------------------ RESIGN ACTIVE ------------------")
-
         backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask {
             UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
         }
         
         locationManager.startMonitoringSignificantLocationChanges()
-    }
-    
-    func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(appLaunched), name: NSNotification.Name.UIApplicationDidFinishLaunching, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     func logToFileAndDebuggerForLocationManager(title: String) {

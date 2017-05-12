@@ -22,6 +22,7 @@
 		C64941FA1EC1222100DD4942 /* BackgroundLocationTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64941F91EC1222100DD4942 /* BackgroundLocationTestTests.swift */; };
 		C64942051EC1222100DD4942 /* BackgroundLocationTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942041EC1222100DD4942 /* BackgroundLocationTestUITests.swift */; };
 		C64942131EC1226900DD4942 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942121EC1226900DD4942 /* LocationManager.swift */; };
+		C65F02AB1EC61D2B00B4C516 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F02AA1EC61D2B00B4C516 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		C64942041EC1222100DD4942 /* BackgroundLocationTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLocationTestUITests.swift; sourceTree = "<group>"; };
 		C64942061EC1222100DD4942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C64942121EC1226900DD4942 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		C65F02AA1EC61D2B00B4C516 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				C62F5CA91EC4DA73003C97B5 /* DateExtension.swift */,
 				C62F5CAD1EC60E56003C97B5 /* TimerEnhanced.swift */,
 				C62F5CB11EC6153D003C97B5 /* Log.swift */,
+				C65F02AA1EC61D2B00B4C516 /* Constants.swift */,
 			);
 			path = BackgroundLocationTest;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C64941E71EC1222100DD4942 /* ViewController.swift in Sources */,
+				C65F02AB1EC61D2B00B4C516 /* Constants.swift in Sources */,
 				C62F5CAA1EC4DA73003C97B5 /* DateExtension.swift in Sources */,
 				C62F5CB21EC6153D003C97B5 /* Log.swift in Sources */,
 				C62F5CAE1EC60E56003C97B5 /* TimerEnhanced.swift in Sources */,

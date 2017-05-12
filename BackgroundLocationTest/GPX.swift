@@ -15,11 +15,9 @@ class GPX {
     init(fileName: String = "Location Data for \(DateFormatter.shortStyle.string(from: Date()))") {
         let fileName = fileName + ".gpx"
         file = File(fileName: fileName, in: .documentDirectory)
-
-        file?.writeToBeginning(content: "<?xml version=\"1.0\"?>")
-        file?.writeToNewlineAtEnd(content: "<gpx version=\"1.1\" creator=\"Ethan Kreloff\">")
-        file?.writeToNewlineAtEnd(content: "<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>\n<name>Ethan Kreloff</name>\n</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
-//        file?.writeToNewlineAtEnd(content: "</gpx>")
+        file?.writeToBeginning("<?xml version=\"1.0\"?>")
+        file?.writeToNewlineAtEnd("<gpx version=\"1.1\" creator=\"Ethan Kreloff\">")
+        file?.writeToNewlineAtEnd("<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>\n<name>Ethan Kreloff</name>\n</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
         
         addObservers()
     }
@@ -37,16 +35,16 @@ class GPX {
         }
         
         coordinateEntry.append("</wpt>")
-        file?.writeToNewlineAtEnd(content: coordinateEntry)
+        file?.writeToNewlineAtEnd(coordinateEntry)
     }
     
     func addComment(content: String) {
         let comment = "<!-- \(content) -->"
-        file?.writeToNewlineAtEnd(content: comment)
+        file?.writeToNewlineAtEnd(comment)
     }
     
     func finishGPX() {
-        file?.writeToNewlineAtEnd(content: "</gpx>")
+        file?.writeToNewlineAtEnd("</gpx>")
         file?.closeFile()
     }
     
