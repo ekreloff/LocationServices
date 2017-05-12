@@ -49,7 +49,6 @@ class GPX {
     }
     
     deinit {
-        finishGPX()
         NotificationCenter.default.removeObserver(self)
     }
     
