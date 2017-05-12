@@ -27,4 +27,12 @@ public extension DateFormatter {
         dateFormatter.timeZone = TimeZone.current
         return dateFormatter
     }
+    
+    static var localMediumTimeStyle:DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .medium
+        dateFormatter.timeZone = NSTimeZone.local
+        return dateFormatter
+    }
 }

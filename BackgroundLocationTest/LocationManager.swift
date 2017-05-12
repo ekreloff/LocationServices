@@ -42,7 +42,6 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.activityType = .fitness
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.requestAlwaysAuthorization()
-        //        locationManager.stopUpdatingLocation()
         locationManager.delegate = self
         
         locationUpdateTimer?.start(interval: timerInterval, target: self, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
@@ -55,22 +54,13 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         locationUpdateTimer?.stop()
     }
     
-
-    
     func switchToHighLocationAccuracy() {
         let intervalRatio = Int(postInterval/timerInterval)
         if cycleCount < intervalRatio {
             cycleCount += 1
         } else {
             if let location = mostRecentLocation, let timestamp = mostRecentLocation?.timestamp, let accuracy = mostRecentLocation?.horizontalAccuracy {
-                let dateformatter = DateFormatter()
-                dateformatter.dateStyle = .none
-                dateformatter.timeStyle = .medium
-                dateformatter.timeZone = NSTimeZone.local
-                //            print("<\(coordinate.latitude), \(coordinate.longitude)> recieved at \(dateformatter.string(from: timestamp)) with accuracy \(accuracy)" )
-                print("POSTED   <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                writeToFileEnd(content: "POSTED   <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                
+                logToFileAndDebuggerForLocationManager(title: "POSTED")
                 NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
             
@@ -78,114 +68,55 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
             mostRecentLocation = nil
         }
         
-        let dateformatter = DateFormatter()
-        dateformatter.dateStyle = .none
-        dateformatter.timeStyle = .medium
-        dateformatter.timeZone = NSTimeZone.local
-        
-        print("Cycle \(cycleCount) Start -------------------- \(dateformatter.string(from: Date()))")
-        writeToFileEnd(content: "Cycle \(cycleCount) Start -------------------- \(dateformatter.string(from: Date()))")
+        Log.shared.logToFileAndDebugger("Cycle \(cycleCount) Start -------------------- \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
         
         locationManager.desiredAccuracy = desiredAccuracy
         locationManager.distanceFilter = distanceFilter
         locationManager.requestLocation()
-        //        locationManager.startUpdatingLocation()
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let coordinate = locations.first?.coordinate, let timestamp = locations.first?.timestamp, let accuracy = locations.first?.horizontalAccuracy {
-            let dateformatter = DateFormatter()
-            dateformatter.dateStyle = .none
-            dateformatter.timeStyle = .medium
-            dateformatter.timeZone = NSTimeZone.local
-            print("RECIEVED <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-            writeToFileEnd(content: "RECIEVED <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-        }
+        logToFileAndDebuggerForLocationManager(title: "RECIEVED")
         
         for location in locations {
             if let mostRecentLocation = mostRecentLocation {
                 if location.horizontalAccuracy <= mostRecentLocation.horizontalAccuracy {
                     self.mostRecentLocation = location
-                    
-                    if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
-                        let dateformatter = DateFormatter()
-                        dateformatter.dateStyle = .none
-                        dateformatter.timeStyle = .medium
-                        dateformatter.timeZone = NSTimeZone.local
-                        print("CHANGED  <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                        writeToFileEnd(content: "CHANGED  <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                    }
+                    logToFileAndDebuggerForLocationManager(title: "CHANGED")
                 }
             } else if location.horizontalAccuracy >= 0 {
                 mostRecentLocation = location
-                
-                if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
-                    let dateformatter = DateFormatter()
-                    dateformatter.dateStyle = .none
-                    dateformatter.timeStyle = .medium
-                    dateformatter.timeZone = NSTimeZone.local
-                    print("RESET    <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                    writeToFileEnd(content: "RESET    <\(coordinate.latitude), \(coordinate.longitude)> at \(dateformatter.string(from: timestamp)), accuracy: \(accuracy)")
-                }
+                logToFileAndDebuggerForLocationManager(title: "RESET")
             }
         }
         
         locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         locationManager.distanceFilter = CLLocationDistanceMax
-        
-        //        if UIApplication.shared.applicationState == .background {
-        //            stopForegroundTimer()
-        //            startForegroundTimer()
-        //        }
-        
-        
-        
-        
-        
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("FAILED   ------------------------------------")
-        writeToFileEnd(content: "FAILED   ------------------------------------")
+        Log.shared.logToFileAndDebugger("FAILED   ------------------------------------")
     }
     
-    //    public func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: Error?) {
-    //        print("deferred update")
-    //        deferring = false
-    //    }
-    //
-    //
     func appLaunched() {
-        print("------------------ APP LAUNCHED ------------------")
-        writeToFileEnd(content: "------------------ APP LAUNCHED ------------------")
+        Log.shared.logToFileAndDebugger("------------------ APP LAUNCHED ------------------")
     }
     
     func appEnteredForeground() {
-        print("------------------ ENTERED FOREGROUND ------------------")
-        writeToFileEnd(content: "------------------ ENTERED FOREGROUND ------------------")
-        
+        Log.shared.logToFileAndDebugger("------------------ ENTERED FOREGROUND ------------------")
         locationManager.stopMonitoringSignificantLocationChanges()
         locationUpdateTimer?.restartIfNotRunning()
     }
     
     func appWillResignActive() {
-        print("------------------ RESIGN ACTIVE ------------------")
-        writeToFileEnd(content: "------------------ RESIGN ACTIVE ------------------")
-        
-        
-        //        locationManager.stopUpdatingLocation()
-        //        locationManager.pausesLocationUpdatesAutomatically = false
-        //        locationManager.startUpdatingLocation()
-        
-        
+        Log.shared.logToFileAndDebugger( "------------------ RESIGN ACTIVE ------------------")
+
         backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask {
             UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
         }
         
         locationManager.startMonitoringSignificantLocationChanges()
-        
-        //        startBackgroundTimer()
     }
     
     func addObservers() {
@@ -193,25 +124,10 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(appEnteredForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
-}
-
-
-// TODO: Delete
-public func writeToFileEnd(content: String, fileName: String = "log.txt") {
-    let contentWithNewLine = content+"\n"
-    let filePath = NSHomeDirectory() + "/Documents/" + fileName
-    let fileHandle = FileHandle(forWritingAtPath: filePath)
-    if (fileHandle != nil) {
-        fileHandle?.seekToEndOfFile()
-        fileHandle?.write(contentWithNewLine.data(using: .utf8)!)
-    } else {
-        do {
-            try contentWithNewLine.write(toFile: filePath, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error while creating \(filePath)")
+    
+    func logToFileAndDebuggerForLocationManager(title: String) {
+        if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
+            Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: timestamp)), accuracy: \(accuracy)")
         }
     }
 }
-
-
-

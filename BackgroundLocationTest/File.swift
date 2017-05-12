@@ -27,38 +27,15 @@ class File {
         }
     }
     
-    func writeToBeginning(content: String) {
+    func writeToBeginning(_ content: String) {
         fileHandle.seek(toFileOffset: 0)
         
         if let data = content.data(using: .utf8) {
             fileHandle.write(data)
         }
     }
-    
-//    func insertAtNewline(content: String, at offset: UInt64) {
-//        let content = "\n" + content
-//        fileHandle.seek(toFileOffset: offset)
-//        
-//        if let data = content.data(using: .utf8) {
-//            fileHandle.write(data)
-//        }
-//    }
-//    
-//    func insertAtNewlineFromEnd(content: String, at offset: UInt64) {
-//        let content = "\n" + content
-//        fileHandle.seekToEndOfFile()
-//        let offset = fileHandle.offsetInFile - offset
-//        
-//        if offset > 0 {
-//            fileHandle.seek(toFileOffset: offset)
-//            
-//            if let data = content.data(using: .utf8) {
-//                fileHandle.write(data)
-//            }
-//        }
-//    }
-//    
-    func writeToNewlineAtEnd(content: String) {
+
+    func writeToNewlineAtEnd(_ content: String) {
         let content = "\n" + content
         fileHandle.seekToEndOfFile()
         
