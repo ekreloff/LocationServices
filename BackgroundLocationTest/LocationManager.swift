@@ -74,7 +74,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
             cycleCount += 1
         } else {
             if let location = mostRecentLocation {
-                logRecentLocationEventToFileAndDebuggerForLocationManager(title: "POSTED")
+                logRecentLocationEventToFileAndDebugger(title: "POSTED")
                 NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
             
@@ -91,15 +91,15 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         for location in locations {
-            logRecievedLocationEventToFileAndDebuggerForLocationManager(location: location)
+            logRecievedLocationEventToFileAndDebugger(location: location)
             if let mostRecentLocation = mostRecentLocation {
                 if location.horizontalAccuracy <= mostRecentLocation.horizontalAccuracy {
                     self.mostRecentLocation = location
-                    logRecentLocationEventToFileAndDebuggerForLocationManager(title: "CHANGED")
+                    logRecentLocationEventToFileAndDebugger(title: "CHANGED")
                 }
             } else if location.horizontalAccuracy >= 0 {
                 mostRecentLocation = location
-                logRecentLocationEventToFileAndDebuggerForLocationManager(title: "RESET")
+                logRecentLocationEventToFileAndDebugger(title: "RESET")
             }
         }
         
@@ -131,13 +131,13 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.startMonitoringSignificantLocationChanges()
     }
     
-    func logRecentLocationEventToFileAndDebuggerForLocationManager(title: String) {
+    func logRecentLocationEventToFileAndDebugger(title: String) {
         if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
             Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: timestamp)), accuracy: \(accuracy)")
         }
     }
     
-    func logRecievedLocationEventToFileAndDebuggerForLocationManager(location: CLLocation, title: String = "RECIEVED") {
+    func logRecievedLocationEventToFileAndDebugger(location: CLLocation, title: String = "RECIEVED") {
         Log.shared.logToFileAndDebugger("\(title) <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: location.timestamp)), accuracy: \(location.horizontalAccuracy)")
     }
 }
