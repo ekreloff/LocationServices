@@ -9,15 +9,15 @@
 import Foundation
 
 class TimerEnhanced: Timer {
-    fileprivate var _timer:Timer?
+    fileprivate var _timer:Timer? 
     fileprivate var ti:TimeInterval?
     fileprivate var t:Any?
     fileprivate var s:Selector?
     fileprivate var ui:Any?
     fileprivate var rep:Bool?
     
-    func start(interval ti: TimeInterval, target t: Any, selector s: Selector, userInfo ui: Any?, repeats rep: Bool) {
-        guard _timer == nil else {
+    func start(interval ti: TimeInterval, target t: Any?, selector s: Selector, userInfo ui: Any?, repeats rep: Bool) {
+        guard _timer == nil, let t = t else {
             return
         }
         

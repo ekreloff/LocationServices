@@ -18,16 +18,17 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     fileprivate let postInterval:TimeInterval
     
     fileprivate var cycleCount = 0
-    fileprivate var locationUpdateTimer:TimerEnhanced?
+//    fileprivate var locationUpdateTimer:TimerEnhanced? = TimerEnhanced()
+    fileprivate var locationUpdateTimer:Timer?
     fileprivate var backgroundTaskIdentifier = UIBackgroundTaskInvalid
     
     public var mostRecentLocation:CLLocation?
     
-    init(getInterval:TimeInterval = 30, postInterval:TimeInterval = 120, accuracy:CLLocationAccuracy = 15.0, distance:CLLocationDistance = kCLDistanceFilterNone) {
-        self.timerInterval = getInterval
-        self.postInterval = postInterval
-        self.desiredAccuracy = accuracy
-        self.distanceFilter = distance
+    init(getInterval:TimeInterval? = 30.0, postInterval:TimeInterval? = 120.0, accuracy:CLLocationAccuracy? = 15.0, distance:CLLocationDistance? = kCLDistanceFilterNone) {
+        self.timerInterval = getInterval ?? 30.0
+        self.postInterval = postInterval ?? 120.0
+        self.desiredAccuracy = accuracy ?? 15.0
+        self.distanceFilter = distance ?? kCLDistanceFilterNone
         
         super.init()
         
@@ -38,14 +39,33 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
         
-        locationUpdateTimer?.start(interval: timerInterval, target: self, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
+//        weak var weakSelf:LocationManager? = self
+//        locationUpdateTimer?.start(interval: timerInterval, target: weakSelf!, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
         
         addObservers()
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        locationUpdateTimer?.stop()
+//        locationUpdateTimer?.stop()
+        stopTimer()
+    }
+    
+    func startTimer() {
+        guard locationUpdateTimer == nil else {
+            return
+        }
+        
+        locationUpdateTimer = Timer.scheduledTimer(timeInterval: timerInterval, target: self, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        guard locationUpdateTimer != nil else {
+            return
+        }
+        
+        locationUpdateTimer?.invalidate()
+        locationUpdateTimer = nil
     }
     
     func switchToHighLocationAccuracy() {
@@ -99,7 +119,8 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func appEnteredForeground() {
         locationManager.stopMonitoringSignificantLocationChanges()
-        locationUpdateTimer?.restartIfNotRunning()
+//        locationUpdateTimer?.restartIfNotRunning()
+        startTimer()
     }
     
     func appWillResignActive() {

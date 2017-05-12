@@ -39,16 +39,8 @@ class ViewController: UIViewController {
             
             activityIndicator.startAnimating()
             startStopButton.setTitle("Finish GPX", for: .normal)
-            
-            if let fileName = fileNameTextField.text, !fileName.isEmpty {
-                gpx = GPX(fileName: fileName)
-            } else {
-                gpx = GPX()
-            }
-            
-            //if let textfield LocationManager(blahblah)
-            locationManager = LocationManager()
-            
+            setGPXFile()
+            setLocationManager()
             addObservers()
         } else {
             tracking = false
@@ -77,6 +69,38 @@ class ViewController: UIViewController {
     
     deinit {
         removeObservers()
+    }
+    
+    func setGPXFile() {
+        if let fileName = fileNameTextField.text, !fileName.isEmpty {
+            gpx = GPX(fileName: fileName)
+        } else {
+            gpx = GPX()
+        }
+    }
+
+    func setLocationManager() {
+        var getFrequency:TimeInterval? = nil
+        if let value = getLocationFrequencyTextField.text, !value.isEmpty {
+            getFrequency = TimeInterval(value)
+        }
+        
+        var postFrequency:TimeInterval? = nil
+        if let value = postLocationFrequencyTextField.text, !value.isEmpty {
+            postFrequency = TimeInterval(value)
+        }
+        
+        var desiredAccuracy:CLLocationAccuracy? = nil
+        if let value = desiredAccuracyTextField.text, !value.isEmpty {
+            desiredAccuracy = CLLocationAccuracy(value)
+        }
+        
+        var distanceFilter:CLLocationDistance? = nil
+        if let value = distanceFilterTextField.text, !value.isEmpty {
+            distanceFilter = CLLocationDistance(value)
+        }
+        
+        locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)
     }
     
     func recieveLocation(_ notification: Notification) {
