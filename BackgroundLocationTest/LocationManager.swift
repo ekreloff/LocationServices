@@ -41,7 +41,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         
 //        weak var weakSelf:LocationManager? = self
 //        locationUpdateTimer?.start(interval: timerInterval, target: weakSelf!, selector: #selector(switchToHighLocationAccuracy), userInfo: nil, repeats: true)
-        
+        startTimer()
         addObservers()
     }
     
@@ -74,7 +74,7 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
             cycleCount += 1
         } else {
             if let location = mostRecentLocation {
-                logToFileAndDebuggerForLocationManager(title: "POSTED")
+                logRecentLocationEventToFileAndDebuggerForLocationManager(title: "POSTED")
                 NotificationCenter.default.post(name: Notification.Name.Custom.LocationUpdated, object: nil, userInfo: ["Location":location])
             }
             
@@ -90,17 +90,16 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        logToFileAndDebuggerForLocationManager(title: "RECIEVED")
-        
         for location in locations {
+            logRecievedLocationEventToFileAndDebuggerForLocationManager(location: location)
             if let mostRecentLocation = mostRecentLocation {
                 if location.horizontalAccuracy <= mostRecentLocation.horizontalAccuracy {
                     self.mostRecentLocation = location
-                    logToFileAndDebuggerForLocationManager(title: "CHANGED")
+                    logRecentLocationEventToFileAndDebuggerForLocationManager(title: "CHANGED")
                 }
             } else if location.horizontalAccuracy >= 0 {
                 mostRecentLocation = location
-                logToFileAndDebuggerForLocationManager(title: "RESET")
+                logRecentLocationEventToFileAndDebuggerForLocationManager(title: "RESET")
             }
         }
         
@@ -132,9 +131,13 @@ public final class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.startMonitoringSignificantLocationChanges()
     }
     
-    func logToFileAndDebuggerForLocationManager(title: String) {
+    func logRecentLocationEventToFileAndDebuggerForLocationManager(title: String) {
         if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
             Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: timestamp)), accuracy: \(accuracy)")
         }
+    }
+    
+    func logRecievedLocationEventToFileAndDebuggerForLocationManager(location: CLLocation, title: String = "RECIEVED") {
+        Log.shared.logToFileAndDebugger("\(title) <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: location.timestamp)), accuracy: \(location.horizontalAccuracy)")
     }
 }
