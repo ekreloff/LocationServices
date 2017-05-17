@@ -22,6 +22,7 @@
 		C64942051EC1222100DD4942 /* BackgroundLocationTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942041EC1222100DD4942 /* BackgroundLocationTestUITests.swift */; };
 		C64942131EC1226900DD4942 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942121EC1226900DD4942 /* LocationManager.swift */; };
 		C65F02AB1EC61D2B00B4C516 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F02AA1EC61D2B00B4C516 /* Constants.swift */; };
+		C66A28B11ECC94CB00A3F74A /* APScheduledLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		C64942061EC1222100DD4942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C64942121EC1226900DD4942 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C65F02AA1EC61D2B00B4C516 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APScheduledLocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				C62F5CAD1EC60E56003C97B5 /* TimerEnhanced.swift */,
 				C62F5CB11EC6153D003C97B5 /* Log.swift */,
 				C65F02AA1EC61D2B00B4C516 /* Constants.swift */,
+				C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */,
 			);
 			path = BackgroundLocationTest;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				C64941E71EC1222100DD4942 /* ViewController.swift in Sources */,
 				C65F02AB1EC61D2B00B4C516 /* Constants.swift in Sources */,
 				C62F5CAA1EC4DA73003C97B5 /* DateExtension.swift in Sources */,
+				C66A28B11ECC94CB00A3F74A /* APScheduledLocationManager.swift in Sources */,
 				C62F5CB21EC6153D003C97B5 /* Log.swift in Sources */,
 				C62F5CAE1EC60E56003C97B5 /* TimerEnhanced.swift in Sources */,
 				C62F5CA81EC4DA50003C97B5 /* StringExtension.swift in Sources */,
@@ -396,7 +400,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -441,7 +445,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -456,6 +460,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2C9WFQT4A5;
 				INFOPLIST_FILE = BackgroundLocationTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.10-4.LocationSample.BackgroundLocationTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,6 +474,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2C9WFQT4A5;
 				INFOPLIST_FILE = BackgroundLocationTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.10-4.LocationSample.BackgroundLocationTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";

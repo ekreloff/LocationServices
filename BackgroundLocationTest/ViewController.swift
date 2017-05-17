@@ -9,8 +9,28 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
-    fileprivate var locationManager:LocationManager? = nil
+class ViewController: UIViewController, APScheduledLocationManagerDelegate {
+    func scheduledLocationManager(_ manager: APScheduledLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+    }
+
+    func scheduledLocationManager(_ manager: APScheduledLocationManager, didUpdateLocations location: CLLocation) {
+        Log.shared.logToDebugger("\(location.timestamp)")
+        
+        var description = gpxDescription
+        let additionalInfo = "Actual: \(location.horizontalAccuracy)\nBackground?: \(UIApplication.shared.applicationState == .background)\n\(DateFormatter.localMediumTimeStyle.string(from: Date()))"
+        description += additionalInfo
+        gpx?.addCoordinate(location: location.coordinate, description: description)
+        gpx?.addComment(additionalInfo)
+
+    }
+
+    func scheduledLocationManager(_ manager: APScheduledLocationManager, didFailWithError error: Error) {
+        
+    }
+
+//    fileprivate var locationManager:LocationManager? = nil
+    fileprivate var manager: APScheduledLocationManager!
     fileprivate var gpx:GPX? = nil
     fileprivate var tracking = false
     fileprivate var gpxDescription = ""
@@ -38,6 +58,8 @@ class ViewController: UIViewController {
             startStopButton.setTitle("Finish GPX", for: .normal)
             setGPXFile()
             setLocationManager()
+            manager = APScheduledLocationManager(delegate: self)
+            manager.startUpdatingLocation(interval: 30.0, acceptableLocationAccuracy: 100.0)
             addObservers()
         } else {
             tracking = false
@@ -50,7 +72,8 @@ class ViewController: UIViewController {
             startStopButton.setTitle("Start New GPX", for: .normal)
             gpx?.finishGPX()
 //            gpx = nil //race condition wirting and clearing
-            locationManager = nil
+//            locationManager = nil
+            manager.stopUpdatingLocation()
             removeObservers()
         }
         
@@ -103,7 +126,7 @@ class ViewController: UIViewController {
         }
         
         setGPXDescription()
-        locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)
+//        locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)`
     }
     
     func recieveLocation(_ notification: Notification) {
@@ -112,9 +135,10 @@ class ViewController: UIViewController {
         }
         
         var description = gpxDescription
-        description += "Actual: \(location.horizontalAccuracy)\nBackground?: \(UIApplication.shared.applicationState == .background)\n\(DateFormatter.localMediumTimeStyle.string(from: Date()))"
+        let additionalInfo = "Actual: \(location.horizontalAccuracy)\nBackground?: \(UIApplication.shared.applicationState == .background)\n\(DateFormatter.localMediumTimeStyle.string(from: Date()))"
+        description += additionalInfo
         gpx?.addCoordinate(location: location.coordinate, description: description)
-        gpx?.addComment(description)
+        gpx?.addComment(additionalInfo)
     }
     
     func addObservers() {

@@ -30,6 +30,17 @@ class BackgroundLocationTestUITests: XCTestCase {
     
     func testExample() {
         // Use recording to get started writing UI tests.
+        let app = XCUIApplication()
+        let fileNameDefaultIsTimestampTextField = app.textFields["File Name (Default is Timestamp)"]
+        fileNameDefaultIsTimestampTextField.tap()
+        fileNameDefaultIsTimestampTextField.typeText("test")
+        app.keyboards.buttons["Done"].tap()
+        let startStop = app.buttons.element(boundBy: 0)
+        XCTAssert(startStop.label == "Start New GPX")
+        startStop.tap()
+        XCTAssert(startStop.label == "Finish GPX")
+        app.buttons["Finish GPX"].tap()
+        
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
