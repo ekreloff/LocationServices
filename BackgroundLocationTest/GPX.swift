@@ -12,12 +12,17 @@ class GPX {
     fileprivate let file:File?
     fileprivate let timeStampFormatter = DateFormatter.xsdDateTime
     
+    public let fileName:String
+    public var path: URL {
+        return file?.filePath ?? URL(fileURLWithPath: "")
+    }
+    
     init(fileName: String = "Location Data for \(DateFormatter.shortStyle.string(from: Date()))") {
-        let fileName = fileName + ".gpx"
-        file = File(fileName: fileName, in: .documentDirectory)
+        self.fileName = fileName + ".gpx"
+        file = File(fileName: self.fileName, in: .documentDirectory)
         file?.writeToBeginning("<?xml version=\"1.0\"?>")
         file?.writeToNewlineAtEnd("<gpx version=\"1.1\" creator=\"Ethan Kreloff\">")
-        file?.writeToNewlineAtEnd("<metadata>\n<name>\(fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>\n<name>Ethan Kreloff</name>\n</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
+        file?.writeToNewlineAtEnd("<metadata>\n<name>\(self.fileName)</name>\n<desc>Created using GPX Creator</desc>\n<author>\n<name>Ethan Kreloff</name>\n</author>\n<time>\(timeStampFormatter.string(from: Date()))</time>\n</metadata>")
         
         addObservers()
     }

@@ -47,24 +47,34 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         
         super.init()
         
-        configureLocationManager()
+//        configureLocationManager()
     }
     
-    private func configureLocationManager(){
+    public func configureLocationManager(accuracy: CLLocationAccuracy?, distance: CLLocationDistance?) {
         manager.allowsBackgroundLocationUpdates = true
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.distanceFilter = kCLDistanceFilterNone
+        manager.desiredAccuracy = accuracy ?? kCLLocationAccuracyBest
+        manager.distanceFilter = distance ?? kCLDistanceFilterNone
         manager.pausesLocationUpdatesAutomatically = false
         manager.delegate = self
     }
     
-    public func requestAlwaysAuthorization() {
-        manager.requestAlwaysAuthorization()
+    public func requestAlwaysAuthorizationIfNeeded() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined:
+               manager.requestAlwaysAuthorization()
+            case .denied, .restricted:
+                Log.shared.logToFileAndDebugger("Location services denied or restricted.")
+            case .authorizedWhenInUse:
+                Log.shared.logToFileAndDebugger("Location services only when in use.")
+            case .authorizedAlways:
+                break
+            }
+        }
     }
     
     public func startUpdatingLocation(interval: TimeInterval, acceptableLocationAccuracy: CLLocationAccuracy = 100) {
         if isRunning {
-            
             stopUpdatingLocation()
         }
         
@@ -140,7 +150,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         
         for location in lastLocations {
             guard location.timestamp > Date(timeIntervalSinceNow: -120.0) else {
-                return
+                continue
             }
             
             logRecievedLocationEventToFileAndDebugger(location: location)

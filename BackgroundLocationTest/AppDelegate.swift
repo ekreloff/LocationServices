@@ -19,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.shared.logToFileAndDebugger("----------------- APP RELAUNCHED FOR LOCATION UPDATE -----------------")
         }
         
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        
         return true
     }
 
