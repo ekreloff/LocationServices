@@ -43,19 +43,18 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
 //    public private(set) var postLocationInterval: TimeInterval = 120
     public private(set) var isRunning = false
     
-    public init(delegate: APScheduledLocationManagerDelegate) {
-        
+    public init(delegate: APScheduledLocationManagerDelegate, accuracy: CLLocationAccuracy? = nil, distance: CLLocationDistance? = nil) {
         self.delegate = delegate
         
         super.init()
         
-//        configureLocationManager()
+        configureLocationManager(accuracy: accuracy ?? 30.0, distance: distance ?? kCLDistanceFilterNone)
     }
     
-    public func configureLocationManager(accuracy: CLLocationAccuracy?, distance: CLLocationDistance?) {
+    private func configureLocationManager(accuracy: CLLocationAccuracy, distance: CLLocationDistance) {
         manager.allowsBackgroundLocationUpdates = true
-        manager.desiredAccuracy = accuracy ?? 30.0
-        manager.distanceFilter = distance ?? kCLDistanceFilterNone
+        manager.desiredAccuracy = accuracy
+        manager.distanceFilter = distance
         manager.pausesLocationUpdatesAutomatically = false
         manager.delegate = self
         
@@ -77,7 +76,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public func startUpdatingLocation(interval: TimeInterval, acceptableLocationAccuracy: CLLocationAccuracy = 1000000) {
+    public func startUpdatingLocation(interval: TimeInterval = 25.0, acceptableLocationAccuracy: CLLocationAccuracy = 1000000) {
         if isRunning {
             stopUpdatingLocation()
         }
@@ -168,7 +167,6 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
                 logRecentLocationEventToFileAndDebugger(title: "RESET")
             }
         }
-
         
         if waitTimer == nil {
             startWaitTimer()
@@ -218,12 +216,10 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
 //    
     private func startWaitTimer() {
         stopWaitTimer()
-        
         waitTimer = Timer.scheduledTimer(timeInterval: WaitForLocationsTime, target: self, selector: #selector(waitTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopWaitTimer() {
-        
         if let timer = waitTimer {
             
             timer.invalidate()
@@ -232,7 +228,6 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func waitTimerEvent() {
-        
         stopWaitTimer()
         
         if acceptableLocationAccuracyRetrieved() {

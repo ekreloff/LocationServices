@@ -153,9 +153,8 @@ class ViewController: UIViewController, APScheduledLocationManagerDelegate, MFMa
         
         setGPXDescription()
         manager = APScheduledLocationManager(delegate: self)
-        manager.configureLocationManager(accuracy: desiredAccuracy, distance: distanceFilter)
         manager.requestAlwaysAuthorizationIfNeeded()
-        manager.startUpdatingLocation(interval: 25.0)
+        manager.startUpdatingLocation()
 //        locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)`
     }
     
