@@ -9,21 +9,17 @@
 import UIKit
 import CoreLocation
 
-
 public protocol APScheduledLocationManagerDelegate {
-    
     func scheduledLocationManager(_ manager: APScheduledLocationManager, didFailWithError error: Error)
     func scheduledLocationManager(_ manager: APScheduledLocationManager, didUpdateLocations location: CLLocation)
     func scheduledLocationManager(_ manager: APScheduledLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
 }
 
-
 public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
-    
     private let MaxBGTime: TimeInterval = 170
     private let MinBGTime: TimeInterval = 2
     private let MinAcceptableLocationAccuracy: CLLocationAccuracy = 5
-    private let WaitForLocationsTime: TimeInterval = 3
+    private let WaitForLocationsTime: TimeInterval = 11
     
     private let delegate: APScheduledLocationManagerDelegate
     private let manager = CLLocationManager()
@@ -154,17 +150,19 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
             }
             
             logRecievedLocationEventToFileAndDebugger(location: location)
+            
             if let mostRecentLocation = mostRecentLocation {
                 if location.horizontalAccuracy <= mostRecentLocation.horizontalAccuracy {
-                    self.mostRecentLocation = location
-                    logRecentLocationEventToFileAndDebugger(title: "CHANGED")
+//                    if location.timestamp <= mostRecentLocation.timestamp {
+                        self.mostRecentLocation = location
+                        logRecentLocationEventToFileAndDebugger(title: "CHANGED")
+//                    }
                 }
             } else if location.horizontalAccuracy >= 0 {
                 mostRecentLocation = location
                 logRecentLocationEventToFileAndDebugger(title: "RESET")
             }
         }
-
         
         if waitTimer == nil {
             startWaitTimer()
@@ -172,25 +170,19 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     private func startCheckLocationTimer() {
-        
         stopCheckLocationTimer()
-        
         checkLocationTimer = Timer.scheduledTimer(timeInterval: checkLocationInterval, target: self, selector: #selector(checkLocationTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopCheckLocationTimer() {
-        
         if let timer = checkLocationTimer {
-            
             timer.invalidate()
             checkLocationTimer=nil
         }
     }
     
     func checkLocationTimerEvent() {
-        
         stopCheckLocationTimer()
-        
         startLocationManager()
         
         // starting from iOS 7 and above stop background task with delay, otherwise location service won't start
@@ -199,12 +191,10 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     private func startWaitTimer() {
         stopWaitTimer()
-        
         waitTimer = Timer.scheduledTimer(timeInterval: WaitForLocationsTime, target: self, selector: #selector(waitTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopWaitTimer() {
-        
         if let timer = waitTimer {
             
             timer.invalidate()
@@ -213,17 +203,14 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func waitTimerEvent() {
-        
         stopWaitTimer()
         
         if acceptableLocationAccuracyRetrieved() {
-            
             startBackgroundTask()
             startCheckLocationTimer()
             stopLocationManager()
             
             let intervalRatio = 4//Int(postInterval/timerInterval)
-        
             if cycleCount < intervalRatio {
                 cycleCount += 1
             } else {
@@ -231,11 +218,10 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
                     logRecentLocationEventToFileAndDebugger(title: "POSTED")
                     delegate.scheduledLocationManager(self, didUpdateLocations: location)
                 }
-                
+    
                 cycleCount = 1
                 mostRecentLocation = nil
             }
-            
             Log.shared.logToFileAndDebugger("Cycle \(cycleCount) Start -------------------- \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
         }else{
             startWaitTimer()
@@ -253,7 +239,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     func stopAndResetBgTaskIfNeeded()  {
         if isManagerRunning {
             stopBackgroundTask()
-        }else{
+        } else {
             stopBackgroundTask()
             startBackgroundTask()
         }
@@ -261,18 +247,17 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     private func startBackgroundTask() {
         let state = UIApplication.shared.applicationState
-        
         if ((state == .background || state == .inactive) && bgTask == UIBackgroundTaskInvalid) {
-            
             bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                
                 self.checkLocationTimerEvent()
             })
         }
     }
     
     @objc private func stopBackgroundTask() {
-        guard bgTask != UIBackgroundTaskInvalid else { return }
+        guard bgTask != UIBackgroundTaskInvalid else {
+            return
+        }
         
         UIApplication.shared.endBackgroundTask(bgTask)
         bgTask = UIBackgroundTaskInvalid
@@ -280,12 +265,11 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     func logRecentLocationEventToFileAndDebugger(title: String) {
         if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
-            Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: timestamp)), accuracy: \(accuracy)")
+            Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: title == "POSTED" ? Date() : timestamp)), accuracy: \(accuracy)")
         }
     }
     
     func logRecievedLocationEventToFileAndDebugger(location: CLLocation, title: String = "RECIEVED") {
         Log.shared.logToFileAndDebugger("\(title) <\(location.coordinate.latitude), \(location.coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: location.timestamp)), accuracy: \(location.horizontalAccuracy)")
     }
-
 }

@@ -16,17 +16,14 @@ class ViewController: UIViewController, APScheduledLocationManagerDelegate, MFMa
     }
 
     func scheduledLocationManager(_ manager: APScheduledLocationManager, didUpdateLocations location: CLLocation) {
-        Log.shared.logToDebugger("\(location.timestamp)")
-        
         var description = gpxDescription
         let additionalInfo = "Actual: \(location.horizontalAccuracy)\nBackground?: \(UIApplication.shared.applicationState == .background)\n\(DateFormatter.localMediumTimeStyle.string(from: Date()))\nBattery: \( UIDevice.current.batteryLevel)"
         description += additionalInfo
         gpx?.addCoordinate(location: location.coordinate, description: description)
-
     }
 
     func scheduledLocationManager(_ manager: APScheduledLocationManager, didFailWithError error: Error) {
-        
+        Log.shared.logToFileAndDebugger("------------- Failed to Get Location -------------")
     }
 
 //    fileprivate var locationManager:LocationManager? = nil
@@ -134,7 +131,7 @@ class ViewController: UIViewController, APScheduledLocationManagerDelegate, MFMa
         var distanceFilter:CLLocationDistance? = nil
         
         func setGPXDescription() {
-            gpxDescription = "Get location frequency: \(getFrequency ?? 30.0)\nPost location frequency: \(postFrequency ?? 120.0)\nDistance filter: \(distanceFilter ?? kCLDistanceFilterNone)\nDesired accuracy: \(desiredAccuracy ?? 15.0), "
+            gpxDescription = "Get location frequency: \(getFrequency ?? 30.0)\nPost location frequency: \(postFrequency ?? 120.0)\nDistance filter: \(distanceFilter ?? kCLDistanceFilterNone)\nDesired accuracy: \(desiredAccuracy ?? kCLLocationAccuracyBest), "
         }
         
         if let value = getLocationFrequencyTextField.text, !value.isEmpty {
@@ -157,7 +154,7 @@ class ViewController: UIViewController, APScheduledLocationManagerDelegate, MFMa
         manager = APScheduledLocationManager(delegate: self)
         manager.configureLocationManager(accuracy: desiredAccuracy, distance: distanceFilter)
         manager.requestAlwaysAuthorizationIfNeeded()
-        manager.startUpdatingLocation(interval: 30.0, acceptableLocationAccuracy: 1000.0)
+        manager.startUpdatingLocation(interval: 19.0, acceptableLocationAccuracy: 1000.0)
 //        locationManager = LocationManager(getInterval: getFrequency, postInterval: postFrequency, accuracy: desiredAccuracy, distance: distanceFilter)`
     }
     
