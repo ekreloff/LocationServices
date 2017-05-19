@@ -23,7 +23,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     private let MaxBGTime: TimeInterval = 170
     private let MinBGTime: TimeInterval = 2
     private let MinAcceptableLocationAccuracy: CLLocationAccuracy = 5
-    private let WaitForLocationsTime: TimeInterval = 3
+    private let WaitForLocationsTime: TimeInterval = 5
     
     private let delegate: APScheduledLocationManagerDelegate
     private let manager = CLLocationManager()
@@ -31,14 +31,16 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     private var isManagerRunning = false
     private var checkLocationTimer: Timer?
     private var waitTimer: Timer?
+//    private var postTimer: Timer?
     private var bgTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     private var lastLocations = [CLLocation]()
     private var mostRecentLocation:CLLocation?
     private var cycleCount = 0
 
     
-    public private(set) var acceptableLocationAccuracy: CLLocationAccuracy = 100
-    public private(set) var checkLocationInterval: TimeInterval = 10
+    public private(set) var acceptableLocationAccuracy: CLLocationAccuracy = 1000000
+    public private(set) var checkLocationInterval: TimeInterval = 25
+//    public private(set) var postLocationInterval: TimeInterval = 120
     public private(set) var isRunning = false
     
     public init(delegate: APScheduledLocationManagerDelegate) {
@@ -52,10 +54,12 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     public func configureLocationManager(accuracy: CLLocationAccuracy?, distance: CLLocationDistance?) {
         manager.allowsBackgroundLocationUpdates = true
-        manager.desiredAccuracy = accuracy ?? kCLLocationAccuracyBest
+        manager.desiredAccuracy = accuracy ?? 30.0
         manager.distanceFilter = distance ?? kCLDistanceFilterNone
         manager.pausesLocationUpdatesAutomatically = false
         manager.delegate = self
+        
+//        startPostLocationTimer()
     }
     
     public func requestAlwaysAuthorizationIfNeeded() {
@@ -73,7 +77,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public func startUpdatingLocation(interval: TimeInterval, acceptableLocationAccuracy: CLLocationAccuracy = 100) {
+    public func startUpdatingLocation(interval: TimeInterval, acceptableLocationAccuracy: CLLocationAccuracy = 1000000) {
         if isRunning {
             stopUpdatingLocation()
         }
@@ -81,7 +85,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         checkLocationInterval = interval > MaxBGTime ? MaxBGTime : interval
         checkLocationInterval = interval < MinBGTime ? MinBGTime : interval
         
-        self.acceptableLocationAccuracy = acceptableLocationAccuracy < MinAcceptableLocationAccuracy ? MinAcceptableLocationAccuracy : acceptableLocationAccuracy
+        self.acceptableLocationAccuracy = max(acceptableLocationAccuracy, MinAcceptableLocationAccuracy)
         
         isRunning = true
         
@@ -172,18 +176,14 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     private func startCheckLocationTimer() {
-        
         stopCheckLocationTimer()
-        
         checkLocationTimer = Timer.scheduledTimer(timeInterval: checkLocationInterval, target: self, selector: #selector(checkLocationTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopCheckLocationTimer() {
-        
         if let timer = checkLocationTimer {
-            
             timer.invalidate()
-            checkLocationTimer=nil
+            checkLocationTimer = nil
         }
     }
     
@@ -197,6 +197,25 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         self.perform(#selector(stopAndResetBgTaskIfNeeded), with: nil, afterDelay: 1)
     }
     
+//    private func startPostLocationTimer() {
+//        stopPostLocationTimer()
+//        postTimer = Timer.scheduledTimer(timeInterval: postLocationInterval, target: self, selector: #selector(postLocationTimerEvent), userInfo: nil, repeats: true)
+//    }
+//    
+//    private func stopPostLocationTimer() {
+//        if let timer = postTimer {
+//            timer.invalidate()
+//            postTimer = nil
+//        }
+//    }
+//    
+//    func postLocationTimerEvent() {
+//        if let location = mostRecentLocation {
+//            logRecentLocationEventToFileAndDebugger(title: "POSTED")
+//            delegate.scheduledLocationManager(self, didUpdateLocations: location)
+//        }
+//    }
+//    
     private func startWaitTimer() {
         stopWaitTimer()
         
@@ -280,7 +299,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     func logRecentLocationEventToFileAndDebugger(title: String) {
         if let coordinate = self.mostRecentLocation?.coordinate, let timestamp = self.mostRecentLocation?.timestamp, let accuracy = self.mostRecentLocation?.horizontalAccuracy {
-            Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: timestamp)), accuracy: \(accuracy)")
+            Log.shared.logToFileAndDebugger("\(title) <\(coordinate.latitude), \(coordinate.longitude)> at \(DateFormatter.localMediumTimeStyle.string(from: title == "POSTED" ? Date() : timestamp)), accuracy: \(accuracy)")
         }
     }
     
