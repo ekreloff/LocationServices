@@ -113,11 +113,13 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     private func startLocationManager() {
         isManagerRunning = true
         manager.startUpdatingLocation()
+        Log.shared.logToFileAndDebugger("start location manager")
     }
     
     private func stopLocationManager() {
         isManagerRunning = false
         manager.stopUpdatingLocation()
+        Log.shared.logToFileAndDebugger("stop location manager")
     }
     
     @objc func applicationDidEnterBackground() {
@@ -139,6 +141,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard isManagerRunning, locations.count > 0 else {
+            Log.shared.logToFileAndDebugger("manager running \(isManagerRunning) locations count \(locations.count)")
             return
         }
         
@@ -146,12 +149,14 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         
         for location in lastLocations {
             guard location.timestamp > Date(timeIntervalSinceNow: -120.0) else {
+                Log.shared.logToFileAndDebugger("location too old")
                 continue
             }
             
             logRecievedLocationEventToFileAndDebugger(location: location)
             
             if let mostRecentLocation = mostRecentLocation {
+                Log.shared.logToFileAndDebugger("mostrecentlocation is set")
                 if location.horizontalAccuracy <= mostRecentLocation.horizontalAccuracy {
 //                    if location.timestamp <= mostRecentLocation.timestamp {
                         self.mostRecentLocation = location
@@ -165,16 +170,19 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         if waitTimer == nil {
+            Log.shared.logToFileAndDebugger("wait timer nil, restarting...")
             startWaitTimer()
         }
     }
     
     private func startCheckLocationTimer() {
+        Log.shared.logToFileAndDebugger("startCheckLocationTimer")
         stopCheckLocationTimer()
         checkLocationTimer = Timer.scheduledTimer(timeInterval: checkLocationInterval, target: self, selector: #selector(checkLocationTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopCheckLocationTimer() {
+        Log.shared.logToFileAndDebugger("stopCheckLocationTimer")
         if let timer = checkLocationTimer {
             timer.invalidate()
             checkLocationTimer=nil
@@ -182,6 +190,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func checkLocationTimerEvent() {
+        Log.shared.logToFileAndDebugger("checkLocationTimerEvent")
         stopCheckLocationTimer()
         startLocationManager()
         
@@ -190,13 +199,14 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     private func startWaitTimer() {
+        Log.shared.logToFileAndDebugger("sartWaitTimer")
         stopWaitTimer()
         waitTimer = Timer.scheduledTimer(timeInterval: WaitForLocationsTime, target: self, selector: #selector(waitTimerEvent), userInfo: nil, repeats: false)
     }
     
     private func stopWaitTimer() {
+        Log.shared.logToFileAndDebugger("stopWaitTimer")
         if let timer = waitTimer {
-            
             timer.invalidate()
             waitTimer=nil
         }
@@ -206,14 +216,17 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         stopWaitTimer()
         
         if acceptableLocationAccuracyRetrieved() {
+            Log.shared.logToFileAndDebugger("acceptableLocationAccuracyRetrieved == true")
             startBackgroundTask()
             startCheckLocationTimer()
             stopLocationManager()
             
             let intervalRatio = 4//Int(postInterval/timerInterval)
             if cycleCount < intervalRatio {
+                Log.shared.logToFileAndDebugger("Cycle incremneted")
                 cycleCount += 1
             } else {
+                Log.shared.logToFileAndDebugger("Interval reset")
                 if let location = mostRecentLocation {
                     logRecentLocationEventToFileAndDebugger(title: "POSTED")
                     delegate.scheduledLocationManager(self, didUpdateLocations: location)
@@ -222,14 +235,17 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
                 cycleCount = 1
                 mostRecentLocation = nil
             }
+            
             Log.shared.logToFileAndDebugger("Cycle \(cycleCount) Start -------------------- \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
         }else{
+            Log.shared.logToFileAndDebugger("acceptableLocationAccuracyRetrieved == false")
             startWaitTimer()
         }
     }
     
     private func acceptableLocationAccuracyRetrieved() -> Bool {
         if let location = mostRecentLocation{
+            Log.shared.logToFileAndDebugger("location accuracy check \(location.horizontalAccuracy <= acceptableLocationAccuracy)")
             return location.horizontalAccuracy <= acceptableLocationAccuracy ? true : false
         } else {
             return false
@@ -248,6 +264,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
     private func startBackgroundTask() {
         let state = UIApplication.shared.applicationState
         if ((state == .background || state == .inactive) && bgTask == UIBackgroundTaskInvalid) {
+            Log.shared.logToFileAndDebugger("start backgrpound task")
             bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
                 self.checkLocationTimerEvent()
             })
@@ -258,6 +275,8 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
         guard bgTask != UIBackgroundTaskInvalid else {
             return
         }
+        
+        Log.shared.logToFileAndDebugger("stop backgrpound task")
         
         UIApplication.shared.endBackgroundTask(bgTask)
         bgTask = UIBackgroundTaskInvalid
