@@ -23,6 +23,7 @@
 		C64942131EC1226900DD4942 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64942121EC1226900DD4942 /* LocationManager.swift */; };
 		C65F02AB1EC61D2B00B4C516 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F02AA1EC61D2B00B4C516 /* Constants.swift */; };
 		C66A28B11ECC94CB00A3F74A /* APScheduledLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */; };
+		C6B8343F1ED3404600451EFD /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B8343E1ED3404600451EFD /* LocationServices.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		C64942121EC1226900DD4942 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C65F02AA1EC61D2B00B4C516 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APScheduledLocationManager.swift; sourceTree = "<group>"; };
+		C6B8343E1ED3404600451EFD /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				C62F5CB11EC6153D003C97B5 /* Log.swift */,
 				C65F02AA1EC61D2B00B4C516 /* Constants.swift */,
 				C66A28B01ECC94CB00A3F74A /* APScheduledLocationManager.swift */,
+				C6B8343E1ED3404600451EFD /* LocationServices.swift */,
 			);
 			path = BackgroundLocationTest;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				C62F5CA61EC4D4FE003C97B5 /* File.swift in Sources */,
 				C64941E51EC1222100DD4942 /* AppDelegate.swift in Sources */,
 				C64942131EC1226900DD4942 /* LocationManager.swift in Sources */,
+				C6B8343F1ED3404600451EFD /* LocationServices.swift in Sources */,
 				C62F5CA21EC4CDFF003C97B5 /* GPX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
