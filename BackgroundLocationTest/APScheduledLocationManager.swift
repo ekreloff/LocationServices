@@ -178,6 +178,10 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
             Log.shared.logToFileAndDebugger("wait timer nil, restarting... \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
             startWaitTimer()
         }
+        
+        if UIApplication.shared.applicationState == .background {
+            manager.allowDeferredLocationUpdates(untilTraveled: CLLocationDistanceMax, timeout: checkLocationInterval)
+        }
     }
     
     private func startCheckLocationTimer() {
@@ -278,7 +282,7 @@ public class APScheduledLocationManager: NSObject, CLLocationManagerDelegate {
             })
         }
         
-        Log.shared.logToFileAndDebugger("FAILED: start backgrpound task background?\(state == .background) inactive?\(state == .background), invalid?\(bgTask == UIBackgroundTaskInvalid) \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
+        Log.shared.logToFileAndDebugger("FAILED?: start backgrpound task background?\(state == .background) inactive?\(state == .inactive), invalid?\(bgTask == UIBackgroundTaskInvalid) \(DateFormatter.localMediumTimeStyle.string(from: Date()))")
     }
     
     @objc private func stopBackgroundTask() {
